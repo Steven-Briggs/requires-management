@@ -1,0 +1,21 @@
+[package]
+name = "central-auth"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+central-core = { path = "../central-core" }
+central-db = { path = "../central-db" }
+
+tokio = { workspace = true }
+actix-web = { workspace = true }
+actix-session = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sqlx = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+reqwest = { workspace = true }
+urlencoding = { workspace = true }

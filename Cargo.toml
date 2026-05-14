@@ -1,0 +1,64 @@
+[workspace]
+members = [
+    "crates/central-core",
+    "crates/central-auth",
+    "crates/central-db",
+    ".",
+]
+resolver = "2"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Web framework
+actix-web = "4"
+actix-web-actors = "4"
+actix-session = { version = "0.9", features = ["cookie-session"] }
+actix-files = "0.6"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Database
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "postgres", "uuid", "chrono", "migrate"] }
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Utilities
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+dotenvy = "0.15"
+urlencoding = "2"
+reqwest = { version = "0.11", features = ["json", "rustls-tls"], default-features = false }
+
+[package]
+name = "requires-management"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+central-core = { path = "crates/central-core" }
+central-auth = { path = "crates/central-auth" }
+central-db = { path = "crates/central-db" }
+
+tokio = { workspace = true }
+actix-web = { workspace = true }
+actix-session = { workspace = true }
+actix-files = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sqlx = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+dotenvy = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }

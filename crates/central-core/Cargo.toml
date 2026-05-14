@@ -1,0 +1,15 @@
+[package]
+name = "central-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+actix-web = { workspace = true }
+tracing = { workspace = true }
+# sqlx needed for Error variant + sqlx::Type derive on UserTier
+sqlx = { workspace = true }

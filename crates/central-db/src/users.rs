@@ -39,7 +39,7 @@ pub async fn upsert_user(
         discord_username,
         display_name,
         avatar_url,
-        UserTier::Registered as UserTier,
+        UserTier::Resident as UserTier,
         now,  // created_at - $7
         now,  // last_login - $8
     )

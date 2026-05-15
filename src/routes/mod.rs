@@ -22,7 +22,7 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
         )
         // Serve the frontend — catch-all for SPA routing
         .service(
-            actix_files::Files::new("/", "./frontend/dist")
+            actix_files::Files::new("/", "./frontend/public")
                 .index_file("index.html")
                 .use_last_modified(true)
         );

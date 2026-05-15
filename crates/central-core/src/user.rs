@@ -2,66 +2,67 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-/// The tier of access a user has across the platform.
-/// Determined at login based on Discord server membership and roles.
+/// Platform access tier.
+/// Transient and Resident are granted automatically on login.
+/// Operator and Architect are granted manually.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, sqlx::Type)]
 #[sqlx(type_name = "user_tier", rename_all = "lowercase")]
 pub enum UserTier {
-    /// Anonymous / not logged in — public features only
-    Public,
-    /// Logged in via Discord — personal features enabled
-    Registered,
-    /// Member of the clan Discord server — clan features enabled
-    Clan,
-    /// Server administrator
-    Admin,
+    /// Not logged in — public tools only
+    Transient,
+    /// Any Discord login — personal features enabled
+    Resident,
+    /// Manually granted — trusted platform contributors
+    Operator,
+    /// Manually granted — full platform admins
+    Architect,
 }
 
 impl UserTier {
-    pub fn can_access_registered(&self) -> bool {
-        matches!(self, UserTier::Registered | UserTier::Clan | UserTier::Admin)
+    pub fn is_resident(&self) -> bool {
+        matches!(self, UserTier::Resident | UserTier::Operator | UserTier::Architect)
     }
 
-    pub fn can_access_clan(&self) -> bool {
-        matches!(self, UserTier::Clan | UserTier::Admin)
+    pub fn is_operator(&self) -> bool {
+        matches!(self, UserTier::Operator | UserTier::Architect)
     }
 
-    pub fn is_admin(&self) -> bool {
-        matches!(self, UserTier::Admin)
+    pub fn is_architect(&self) -> bool {
+        matches!(self, UserTier::Architect)
     }
 }
 
-/// A platform user. Populated on first Discord OAuth login and updated on subsequent logins.
+/// A platform user.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct User {
-    pub id: Uuid,
-    pub discord_id: String,
+    pub id:               Uuid,
+    pub discord_id:       String,
     pub discord_username: String,
-    pub display_name: String,
-    pub avatar_url: Option<String>,
-    pub tier: UserTier,
-    pub created_at: DateTime<Utc>,
-    pub last_login: DateTime<Utc>,
+    pub display_name:     String,
+    pub avatar_url:       Option<String>,
+    pub tier:             UserTier,
+    pub created_at:       DateTime<Utc>,
+    pub last_login:       DateTime<Utc>,
 }
 
-/// Minimal user info safe to expose in session cookies and API responses.
+/// Minimal user info safe to store in session cookies and return from API.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SessionUser {
-    pub id: Uuid,
-    pub discord_id: String,
+    pub id:           Uuid,
+    pub discord_id:   String,
     pub display_name: String,
-    pub avatar_url: Option<String>,
-    pub tier: UserTier,
+    pub avatar_url:   Option<String>,
+    pub tier:         UserTier,
 }
 
 impl From<User> for SessionUser {
     fn from(u: User) -> Self {
         Self {
-            id: u.id,
-            discord_id: u.discord_id,
+            id:           u.id,
+            discord_id:   u.discord_id,
             display_name: u.display_name,
-            avatar_url: u.avatar_url,
-            tier: u.tier,
+            avatar_url:   u.avatar_url,
+            tier:         u.tier,
         }
     }
 }

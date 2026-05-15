@@ -40,9 +40,9 @@ function renderLoginButton() {
 
 function renderUserRow(user) {
     const tierBadge = {
-        registered: '<span class="badge badge-registered">registered</span>',
-        clan:        '<span class="badge badge-clan">clan</span>',
-        admin:       '<span class="badge badge-admin">admin</span>',
+        registered: '<span class="badge badge-resident">registered</span>',
+        clan:        '<span class="badge badge-operator">clan</span>',
+        admin:       '<span class="badge badge-architect">admin</span>',
     }[user.tier] ?? '';
 
     const avatarContent = user.avatar_url

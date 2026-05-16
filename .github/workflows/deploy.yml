@@ -29,10 +29,11 @@ jobs:
             ${{ runner.os }}-cargo-requires-
 
       - name: Install cross
-        run: which cross || cargo install cross --git https://github.com/cross-rs/cross
+        run: |
+          ~/.cargo/bin/cross --version || cargo install cross --git https://github.com/cross-rs/cross
 
       - name: Build release binary
-        run: cross build --release --target aarch64-unknown-linux-gnu
+        run: ~/.cargo/bin/cross build --release --target aarch64-unknown-linux-gnu
 
       - name: Deploy binary
         run: |

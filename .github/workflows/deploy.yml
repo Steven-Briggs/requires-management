@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, linux, arm64, cascade-nexus]
+    runs-on: [self-hosted, Linux, ARM64, cascade-nexus]
 
     steps:
       - name: Checkout

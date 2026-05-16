@@ -28,16 +28,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-requires-
 
-      - name: Install cross
-        run: |
-          ~/.cargo/bin/cross --version || cargo install cross --git https://github.com/cross-rs/cross
-
       - name: Build release binary
-        run: ~/.cargo/bin/cross build --release --target aarch64-unknown-linux-gnu
+        run: cargo build --release
 
       - name: Deploy binary
         run: |
-          cp target/aarch64-unknown-linux-gnu/release/requires-management \
+          cp target/release/requires-management \
              /opt/requires-management/requires-management.new
           mv /opt/requires-management/requires-management.new \
              /opt/requires-management/requires-management

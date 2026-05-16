@@ -1,0 +1,55 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, linux, arm64, cascade-nexus]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-unknown-linux-gnu
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-requires-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-requires-
+
+      - name: Install cross
+        run: which cross || cargo install cross --git https://github.com/cross-rs/cross
+
+      - name: Build release binary
+        run: cross build --release --target aarch64-unknown-linux-gnu
+
+      - name: Deploy binary
+        run: |
+          cp target/aarch64-unknown-linux-gnu/release/requires-management \
+             /opt/requires-management/requires-management.new
+          mv /opt/requires-management/requires-management.new \
+             /opt/requires-management/requires-management
+
+      - name: Deploy frontend
+        run: |
+          rsync -a --delete frontend/public/ /opt/requires-management/frontend/public/
+
+      - name: Restart service
+        run: sudo systemctl restart requires-management
+
+      - name: Health check
+        run: |
+          sleep 3
+          curl -sf http://127.0.0.1:8082 || \
+            (echo "Health check failed" && journalctl -u requires-management -n 50 --no-pager && exit 1)

@@ -1,6 +1,16 @@
 /* requires.management — component styles
-   Patterns directly derived from nullpoint.nexus component CSS.
-   Uses identical token names, clip-paths, color-mix tints, and hover mechanics.
+   Decrypt Ecosystem design system — v0.1
+
+   Key deltas from previous version:
+   - .eyebrow: color --color-accent → --color-info (net cyan)
+     Eyebrows are the system speaking. Amber is active/persisted state.
+   - .status-dot: box-shadow glow removed. Flat + opacity pulse only.
+   - .service-card hover: box-shadow removed. translateY(-1px) + border only.
+   - .pillar-card::before: gradient shimmer → solid left-bar slide.
+     Gradients are banned in Decrypt unless encoding a continuous physical property.
+   - .btn-ghost-sm hover: lifts to amber, not neutral white.
+   - .btn-discord hover: box-shadow glow removed.
+   - All button font-family: mono (terminal voice, not body)
 */
 
 /* ── Buttons ── */
@@ -12,67 +22,72 @@
   align-items:     center;
   justify-content: center;
   gap:             var(--space-2);
-  font-family:     var(--font-family-body);
+  font-family:     var(--font-family-mono);
   font-weight:     var(--font-weight-heading);
-  letter-spacing:  0.1em;
+  letter-spacing:  0.12em;
   text-transform:  uppercase;
   cursor:          pointer;
   border:          none;
   outline:         none;
   text-decoration: none;
   transition: opacity var(--transition-fast), color var(--transition-fast),
-              border-color var(--transition-fast), box-shadow var(--transition-fast);
+  background var(--transition-fast), border-color var(--transition-fast);
   white-space: nowrap;
 }
 
 .btn-primary {
-  font-size:  var(--font-base);
+  font-size:  var(--font-small);
   padding:    var(--space-3) var(--space-8);
   background: var(--color-accent);
   color:      var(--color-text-on-accent);
   clip-path:  polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
 }
-.btn-primary:hover { opacity: 0.85; }
+.btn-primary:hover  { background: var(--color-accent-hover); }
+.btn-primary:active { background: var(--color-accent-active); }
 
 .btn-ghost {
-  font-size:  var(--font-base);
+  font-size:  var(--font-small);
   padding:    var(--space-3) var(--space-8);
   background: transparent;
-  color:      var(--color-text-primary);
+  color:      var(--color-text-secondary);
   border:     1px solid var(--color-border);
   clip-path:  polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
 }
 .btn-ghost:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
 .btn-primary-sm {
-  font-size:  var(--font-small);
+  font-size:  var(--font-tiny);
   padding:    var(--space-2) var(--space-5);
   background: var(--color-accent);
   color:      var(--color-text-on-accent);
   clip-path:  polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
 }
-.btn-primary-sm:hover:not(:disabled) { opacity: 0.85; }
-.btn-primary-sm:disabled             { opacity: 0.35; cursor: not-allowed; }
+.btn-primary-sm:hover:not(:disabled)  { background: var(--color-accent-hover); }
+.btn-primary-sm:active:not(:disabled) { background: var(--color-accent-active); }
+.btn-primary-sm:disabled              { opacity: 0.35; cursor: not-allowed; }
 
 .btn-ghost-sm {
-  font-size:  var(--font-small);
+  font-size:  var(--font-tiny);
   padding:    var(--space-2) var(--space-5);
   background: transparent;
   color:      var(--color-text-secondary);
   border:     1px solid var(--color-border);
   clip-path:  polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
 }
-.btn-ghost-sm:hover:not(:disabled) { color: var(--color-text-primary); border-color: var(--color-text-primary); }
+.btn-ghost-sm:hover:not(:disabled) {
+  color:        var(--color-accent);
+  border-color: var(--color-accent);
+}
 
-/* Discord sign-in — no clip-path, rounded */
+/* Discord — no clip-path, no glow */
 .btn-discord {
   display:         inline-flex;
   align-items:     center;
   justify-content: center;
   gap:             var(--space-2);
   font-family:     var(--font-family-mono);
-  font-size:       var(--font-small);
-  letter-spacing:  0.08em;
+  font-size:       var(--font-tiny);
+  letter-spacing:  0.10em;
   text-transform:  uppercase;
   cursor:          pointer;
   border:          none;
@@ -83,16 +98,11 @@
   background:      #5865F2;
   color:           #ffffff;
   border-radius:   var(--radius-sm);
-  transition:      opacity var(--transition-fast), box-shadow var(--transition-fast);
+  transition:      opacity var(--transition-fast);
 }
-.btn-discord:hover {
-  opacity:    0.9;
-  box-shadow: 0 0 16px rgba(88, 101, 242, 0.35);
-  color:      #ffffff;
-}
+.btn-discord:hover { opacity: 0.88; color: #ffffff; }
 
 /* ── Navigation ── */
-/* Matches site.css .site-nav__link pattern */
 .nav-link {
   font-family:     var(--font-family-mono);
   font-size:       var(--font-tiny);
@@ -123,7 +133,7 @@
   display:        inline-block;
   font-family:    var(--font-family-mono);
   font-size:      var(--font-tiny);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
   padding:        2px var(--space-2);
   border:         1px solid transparent;
@@ -157,7 +167,6 @@
 .user-avatar img   { width: 100%; height: 100%; object-fit: cover; }
 
 /* ── Service cards ── */
-/* Matches rules-index-card pattern from nullpoint rules.css exactly */
 .service-card {
   display:         flex;
   flex-direction:  column;
@@ -170,11 +179,9 @@
   position:        relative;
   overflow:        hidden;
   transition:      border-color var(--transition-normal),
-                   transform var(--transition-normal),
-                   box-shadow var(--transition-normal);
+  transform var(--transition-normal);
 }
 
-/* Accent line slides in on hover — same as rules-index-card::before */
 .service-card::before {
   content:          '';
   position:         absolute;
@@ -186,18 +193,21 @@
   transition:       transform var(--transition-normal);
 }
 
+/* No box-shadow. Decrypt doesn't glow. */
 .service-card:not(.service-card--offline):hover {
   border-color: var(--color-accent);
-  transform:    translateY(-2px);
-  box-shadow:   0 8px 32px color-mix(in srgb, var(--color-accent) 8%, transparent);
+  transform:    translateY(-1px);
 }
 .service-card:not(.service-card--offline):hover::before { transform: scaleX(1); }
 
 .service-card--offline { opacity: 0.45; cursor: default; pointer-events: none; }
 
+/* Service card names use display font (Big Shoulders Stencil) as wordmarks */
 .service-card__name {
   font-family:    var(--font-family-display);
   font-size:      var(--font-h4);
+  font-weight:    800;
+  text-transform: uppercase;
   letter-spacing: 0.04em;
   color:          var(--color-text-primary);
 }
@@ -210,25 +220,25 @@
 }
 
 .service-card__footer {
-  display:      flex;
-  align-items:  center;
-  gap:          var(--space-3);
-  margin-top:   auto;
-  padding-top:  var(--space-3);
-  border-top:   1px solid var(--color-divider);
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-3);
+  margin-top:  auto;
+  padding-top: var(--space-3);
+  border-top:  1px solid var(--color-divider);
 }
 
 .service-card__tag {
   font-family:    var(--font-family-mono);
   font-size:      var(--font-tiny);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.10em;
   color:          var(--color-text-disabled);
 }
 
 .service-card__badge {
   font-family:    var(--font-family-mono);
   font-size:      var(--font-tiny);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.10em;
   padding:        2px var(--space-2);
 }
 .service-card__badge--available {
@@ -240,8 +250,7 @@
   border:  1px solid var(--color-border);
 }
 
-/* ── Pillar cards — for feature listing ── */
-/* Matches pillar-card pattern from nullpoint index.css */
+/* ── Pillar cards ── */
 .pillar-card {
   display:        flex;
   flex-direction: column;
@@ -253,28 +262,50 @@
   overflow:       hidden;
   transition:     border-color var(--transition-normal), transform var(--transition-normal);
 }
+
+/* Left-bar slide — replaces the old gradient shimmer on ::before */
+/* Gradients are banned unless encoding a continuous physical property */
 .pillar-card::before {
   content:    '';
   position:   absolute;
-  top: 0; left: 0; right: 0;
-  height:     1px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  opacity:    0;
-  transition: opacity var(--transition-normal);
+  top: 0; left: 0;
+  width:      2px;
+  height:     0;
+  background: var(--color-accent);
+  transition: height var(--transition-normal);
 }
-.pillar-card:hover                { border-color: var(--color-accent); transform: translateY(-2px); }
-.pillar-card:hover::before        { opacity: 1; }
+.pillar-card:hover               { border-color: var(--color-accent); transform: translateY(-1px); }
+.pillar-card:hover::before       { height: 100%; }
 
-.pillar-card__icon  { font-size: 1.6rem; color: var(--color-accent); line-height: 1; }
-.pillar-card__title { font-family: var(--font-family-display); font-size: var(--font-base); color: var(--color-text-primary); }
-.pillar-card__body  { font-size: var(--font-small); color: var(--color-text-secondary); line-height: 1.6; }
+.pillar-card__icon {
+  font-size:   1.4rem;
+  color:       var(--color-accent);
+  line-height: 1;
+}
+.pillar-card__title {
+  font-family:    var(--font-family-mono);
+  font-size:      var(--font-small);
+  color:          var(--color-text-primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.pillar-card__body {
+  font-size:   var(--font-small);
+  color:       var(--color-text-secondary);
+  line-height: 1.6;
+}
 
-/* ── Status dot ── */
+/* ── Status dot — no glow ── */
 .status-dot {
   display:       inline-block;
-  width:         8px; height: 8px;
+  width:         6px;
+  height:        6px;
   border-radius: 50%;
   background:    var(--color-accent);
-  box-shadow:    0 0 8px var(--color-accent);
-  animation:     pulse 2s ease-in-out infinite;
+  animation:     status-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
 }

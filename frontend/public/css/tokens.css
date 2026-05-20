@@ -1,47 +1,60 @@
 /* requires.management — design tokens
-   Built on the nullpoint.nexus design system.
-   requires.management is an extension of that framework.
-   
-   Token names, font stack, surface layering, and component patterns
-   are identical to nullpoint.nexus global.css. Only --color-accent
-   and its derivatives change per service via [data-service].
+   Decrypt Ecosystem design system — v0.1
+   The platform hub. Front door to the entire ecosystem.
+
+   Platform default accent: net cyan (#4dbdb4)
+   The hub is the infrastructure layer — the net itself.
+   Not a tool. Not a service. The thing that holds everything else.
+
+   Subdomain accents:
+     warframe.*  — amber  #d4882a  (Orokin gold, the logged trade record)
+     nodesync.*  — green  #6ba84f  (signal-success, verified node state)
+     persona.*   — blue   #3c8fd4  (personal data layer, cold and private)
+
+   Substrate tokens are identical to nullpoint.nexus --sprawl-* values.
+   The ecosystem lives in the same world.
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:opsz,wght@10..72,800&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap');
 
 :root {
-  /* ── Surface layers ── */
-  --color-background:     #0d0d0f;
-  --color-foreground:     #1a1a2e;
-  --color-surface-raised: #1f1f35;
+  /* ── Substrate — warm dark, shared with nullpoint.nexus ── */
+  --color-background:     #110d0c;   /* --sprawl-100 */
+  --color-foreground:     #181311;   /* --sprawl-200 */
+  --color-surface-raised: #221a17;   /* --sprawl-300 */
+  --color-surface-hover:  #2c221e;   /* --sprawl-400 */
 
-  /* ── Text ── */
-  --color-text-primary:   #e0e0ff;
-  --color-text-secondary: #8888aa;
-  --color-text-disabled:  #444466;
-  --color-text-on-accent: #0d0d0f;
+  /* ── Text — warm off-whites ── */
+  --color-text-primary:   #f2ece3;   /* --ink-100 */
+  --color-text-secondary: #c9bfb3;   /* --ink-200 */
+  --color-text-disabled:  #5a4f46;   /* --ink-400 */
+  --color-text-on-accent: #110d0c;   /* dark text on cyan fills — still readable */
 
-  /* ── Platform accent — requires.management root ── */
-  /* Each service overrides these three via [data-service] */
-  --color-accent:         #00ffe7;
-  --color-accent-hover:   #33fff0;
-  --color-accent-active:  #00ccb8;
+  /* ── Platform accent — net cyan ── */
+  /* The hub is the net. The infrastructure layer. */
+  --color-accent:        #4dbdb4;
+  --color-accent-hover:  #65cec5;
+  --color-accent-active: #2f8a82;
 
   /* ── Semantic ── */
-  --color-success:  #39ff14;
-  --color-warning:  #ffaa00;
-  --color-danger:   #ff3c5f;
-  --color-info:     #3c9eff;
+  /* Note: --color-info shares the cyan value here but is semantically distinct.
+     --color-accent = platform identity, interactive, active state.
+     --color-info   = system labels, eyebrows, functional infrastructure voice.
+     On the hub they resolve to the same hue. On subdomains they diverge. */
+  --color-danger:  #e8202a;   /* alarm — explicit error/destructive only */
+  --color-info:    #4dbdb4;   /* net cyan — system labels, functional voice */
+  --color-success: #6ba84f;   /* recovery, available, verified */
+  --color-warning: #d49a2c;   /* caution */
 
   /* ── Structure ── */
-  --color-border:          #2a2a4a;
-  --color-divider:         #1e1e38;
-  --color-grid-line:       #2a2a4a;
-  --color-scrollbar-thumb: #3a3a5c;
-  --color-scrollbar-track: #12121e;
+  --color-border:          #3a2d27;
+  --color-divider:         #221a17;
+  --color-grid-line:       #2c221e;
+  --color-scrollbar-thumb: #4a3a32;
+  --color-scrollbar-track: #110d0c;
 
-  /* ── Typography — identical to nullpoint ── */
-  --font-family-display: 'Orbitron', sans-serif;
+  /* ── Typography ── */
+  --font-family-display: 'Big Shoulders Stencil', sans-serif;
   --font-family-body:    'Rajdhani', sans-serif;
   --font-family-mono:    'Share Tech Mono', monospace;
 
@@ -53,6 +66,7 @@
   --font-base:        1.100rem;
   --font-small:       0.950rem;
   --font-tiny:        0.800rem;
+  --font-micro:       0.687rem;
   --font-mono-offset: -0.05rem;
 
   --font-weight-body:    400;
@@ -72,40 +86,48 @@
   --space-20: 5rem;
 
   /* ── Radii ── */
-  --radius-sm: 2px;
-  --radius-md: 4px;
+  --radius-sm: 1px;
+  --radius-md: 2px;
 
   /* ── Transitions ── */
-  --transition-fast:   0.15s ease;
-  --transition-normal: 0.25s ease;
+  --transition-fast:   0.12s cubic-bezier(.4,0,.2,1);
+  --transition-normal: 0.22s cubic-bezier(.4,0,.2,1);
   --transition-theme:  0.3s ease;
 
   /* ── Layout ── */
-  --page-gutter:  var(--space-8);
-  --content-max:  1100px;
-  --header-height: 64px;
+  --page-gutter:   var(--space-8);
+  --content-max:   1100px;
+  --header-height: 52px;
 }
 
 @media (max-width: 768px) { :root { --page-gutter: var(--space-5); } }
 @media (max-width: 480px) { :root { --page-gutter: var(--space-4); } }
 
-/* ── Service accent overrides ──────────────────────────────────────────────── */
-/* Set data-service on <html> in each subdomain's index.html */
+/* ── Subdomain accent overrides ────────────────────────────────────────────── */
+/* Each service overrides --color-accent and its derivatives.
+   --color-info (net cyan) does NOT change — it is always the system voice.
+   --color-text-on-accent adjusts where legibility demands it. */
 
+/* warframe — Orokin amber, the logged trade record */
 [data-service="warframe"] {
-  --color-accent:        #c9a84c;
-  --color-accent-hover:  #e0be5c;
-  --color-accent-active: #a88838;
+  --color-accent:        #d4882a;
+  --color-accent-hover:  #e8a040;
+  --color-accent-active: #a06820;
+  --color-text-on-accent: #110d0c;
 }
 
+/* nodesync — signal green, verified node state */
 [data-service="nodesync"] {
-  --color-accent:        #39ff14;
-  --color-accent-hover:  #55ff33;
-  --color-accent-active: #28cc0e;
+  --color-accent:        #6ba84f;
+  --color-accent-hover:  #82c462;
+  --color-accent-active: #4d8835;
+  --color-text-on-accent: #110d0c;
 }
 
+/* persona — personal blue, cold and private */
 [data-service="persona"] {
-  --color-accent:        #3c9eff;
-  --color-accent-hover:  #5cb0ff;
-  --color-accent-active: #2280e0;
+  --color-accent:        #3c8fd4;
+  --color-accent-hover:  #5aa8e8;
+  --color-accent-active: #2470b0;
+  --color-text-on-accent: #110d0c;
 }

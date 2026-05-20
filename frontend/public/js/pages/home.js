@@ -1,4 +1,8 @@
 // requires.management — home page
+// Decrypt Ecosystem design system — v0.1
+//
+// Patch: removed hardcoded text-shadow glow from service card glyph span.
+// Glows are banned in the Decrypt system. The glyph is amber; that's enough.
 import { Auth } from '../auth.js';
 
 const SERVICES = [
@@ -54,14 +58,14 @@ export function renderHome(el) {
 
                 <div class="hero__cta">
                     ${user
-                        ? `<span class="font-mono text-small text-secondary">
+        ? `<span class="font-mono text-small text-secondary">
                                &gt; authenticated // <span class="text-accent">${user.display_name}</span>
                            </span>`
-                        : `<button class="btn-discord" onclick="window.location.href='/auth/login'">
+        : `<button class="btn-discord" onclick="window.location.href='/auth/login'">
                                ${discordIcon()} sign in with discord
                            </button>
                            <a href="#services" class="btn-ghost">explore tools</a>`
-                    }
+    }
                 </div>
             </div>
         </section>
@@ -106,14 +110,13 @@ export function renderHome(el) {
                 </span>
                 <span class="site-footer__copy">
                     ${user
-                        ? `session active // <span class="text-accent">${user.display_name}</span>`
-                        : 'not authenticated'}
+        ? `session active // <span class="text-accent">${user.display_name}</span>`
+        : 'not authenticated'}
                 </span>
             </div>
         </footer>
     `;
 
-    // Smooth scroll for anchor link
     el.querySelector('a[href="#services"]')?.addEventListener('click', e => {
         e.preventDefault();
         document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
@@ -129,8 +132,7 @@ function renderServiceCard(service) {
            href="${href}"
            ${service.available ? 'target="_blank"' : 'tabindex="-1"'}>
             <div style="display:flex;align-items:flex-start;gap:var(--space-3)">
-                <span style="font-size:1.8rem;color:var(--color-accent);
-                             line-height:1;text-shadow:0 0 12px color-mix(in srgb,var(--color-accent) 40%,transparent)">
+                <span style="font-size:1.8rem;color:var(--color-accent);line-height:1">
                     ${service.glyph}
                 </span>
                 <div style="display:flex;flex-direction:column;gap:var(--space-2);flex:1">

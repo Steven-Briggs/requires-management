@@ -5,3 +5,5 @@ frontend/node_modules
 *.pem
 *.key
 .idea/
+context_dump_platform.sh
+requires_platform_context.md
